@@ -1,14 +1,34 @@
 version: '3.8'
 
 services:
-  frontend:
-    build: ./web
+  web:
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
     ports:
       - "3000:3000"
     restart: unless-stopped
 
-  backend:
-    build: ./rest
+  rest:
+    build:
+      context: .
+      dockerfile: docker/rest/Dockerfile
     ports:
       - "4000:3001"
     restart: unless-stopped
+
+  db:
+    image: postgres:15
+    container_name: postgres-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: saas
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
