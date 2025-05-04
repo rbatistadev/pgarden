@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./web
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  backend:
+    build: ./rest
+    ports:
+      - "4000:3001"
+    restart: unless-stopped
