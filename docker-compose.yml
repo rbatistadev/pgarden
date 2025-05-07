@@ -17,9 +17,6 @@ services:
     ports:
       - "4000:3001"
       - "9229:9229"
-    volumes:
-      - ./rest:/app
-       - /app/node_modules
     restart: unless-stopped
     depends_on:
       - db
