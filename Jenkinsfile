@@ -14,7 +14,7 @@ pipeline {
 
     stage('Build Images') {
       steps {
-        sh "${COMPOSE_CMD} build"
+        sh "${COMPOSE_CMD} build --no-cache"
       }
     }
 
