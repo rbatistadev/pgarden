@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/web/Dockerfile
+    container_name: pgarden-web
     ports:
       - "3000:3000"
     restart: unless-stopped
@@ -20,15 +21,17 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+    volumes:
+      - ./rest:/app
 
   db:
     image: postgres:15
-    container_name: postgres-db
+    container_name: pgarden-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: saas
+      POSTGRES_USER: pgarden
+      POSTGRES_PASSWORD: pgarden
+      POSTGRES_DB: pgarden
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:

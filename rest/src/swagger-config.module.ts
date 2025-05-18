@@ -5,8 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 export class SwaggerConfigModule {
   static setup(app: INestApplication): void {
     const config = new DocumentBuilder()
-      .setTitle('Prolead API')
-      .setDescription('The prolead API description')
+      .setTitle('People Garden API')
+      .setDescription('The People Garden API description')
       .setVersion('1.0')
       .addBearerAuth()
       .build();
