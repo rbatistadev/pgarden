@@ -2,44 +2,41 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { IUserRepository } from 'src/domain/user/user.repository';
 import { User } from 'src/domain/user/user.entity';
-
+import { User as PrismaUser } from '@prisma/client';
 @Injectable()
 export class UserPrismaRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async findByEmail(email: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+    return user ? this.toEntity(user) : null;
+  }
+
+  async findById(id: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    return user ? this.toEntity(user) : null;
+  }
+
   async save(user: User): Promise<User> {
-    const record = await this.prisma.user.create({
+    const createdUser = await this.prisma.user.update({
+      where: { id: user.id },
       data: {
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        companyId: user.companyId,
+        refreshTokenHash: user.getRefreshTokenHash(),
       },
     });
 
-    return new User(
-      record.id,
-      record.name,
-      record.email,
-      record.password,
-      record.companyId,
-      record.createdAt,
-    );
+    return this.toEntity(createdUser);
   }
 
-  async findByEmail(email: string, companyId: string): Promise<User | null> {
-    const user = await this.prisma.user.findFirst({
-      where: { email, companyId },
-    });
-    return user
-      ? new User(
-          user.id,
-          user.name,
-          user.email,
-          user.password,
-          user.companyId,
-          user.createdAt,
-        )
-      : null;
+  private toEntity(prismaUser: PrismaUser): User {
+    return new User(
+      prismaUser.id,
+      prismaUser.name,
+      prismaUser.email,
+      prismaUser.passwordHash,
+      prismaUser.companyId,
+      prismaUser.createdAt,
+      prismaUser.refreshTokenHash,
+    );
   }
 }
