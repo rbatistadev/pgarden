@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { Company } from 'src/domain/company/company.entity';
-import { ICompanyRepository } from 'src/domain/company/company.repository';
+import { PrismaService } from '../service/prisma.service';
+import { Company } from 'src/domain/model/company/company.entity';
+import { ICompanyRepository } from 'src/domain/model/company/company.repository';
 
 @Injectable()
 export class CompanyPrismaRepository implements ICompanyRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async save(company: Company): Promise<Company> {
+  async create(company: Company): Promise<Company> {
     const record = await this.prisma.company.create({
       data: {
+        id: company.id,
         name: company.name,
       },
     });

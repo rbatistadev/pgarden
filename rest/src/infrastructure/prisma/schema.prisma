@@ -21,6 +21,7 @@ model User {
   passwordHash     String
   refreshTokenHash String?
   companyId        String
+  role             Role     @default(USER)
   company          Company  @relation(fields: [companyId], references: [id])
   createdAt        DateTime @default(now())
 }
@@ -29,4 +30,10 @@ model Company {
   id    String @id @default(uuid())
   name  String @unique
   users User[]
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  USER
 }

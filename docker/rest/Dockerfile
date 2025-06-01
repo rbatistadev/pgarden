@@ -10,4 +10,5 @@ RUN npm run build
 
 EXPOSE 3001 9229
 
-CMD ["npm", "run", "start:prod"]
+#CMD ["npm", "run", "start:prod"]
+CMD ["tail", "-f", "100", "/dev/null"]

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { IUserRepository } from 'src/domain/user/user.repository';
-import { User } from 'src/domain/user/user.entity';
+import { PrismaService } from '../service/prisma.service';
+import { IUserRepository } from 'src/domain/model/user/user.repository.interface';
+import { User } from 'src/domain/model/user/user.entity';
 import { User as PrismaUser } from '@prisma/client';
 @Injectable()
 export class UserPrismaRepository implements IUserRepository {
@@ -17,11 +17,15 @@ export class UserPrismaRepository implements IUserRepository {
     return user ? this.toEntity(user) : null;
   }
 
-  async save(user: User): Promise<User> {
-    const createdUser = await this.prisma.user.update({
-      where: { id: user.id },
+  async create(user: User): Promise<User> {
+    const createdUser = await this.prisma.user.create({
       data: {
+        name: user.name,
+        email: user.email,
+        passwordHash: user.getPasswordHash(),
+        companyId: user.companyId,
         refreshTokenHash: user.getRefreshTokenHash(),
+        role: user.role,
       },
     });
 
@@ -29,14 +33,18 @@ export class UserPrismaRepository implements IUserRepository {
   }
 
   private toEntity(prismaUser: PrismaUser): User {
-    return new User(
-      prismaUser.id,
+    const user = new User(
       prismaUser.name,
       prismaUser.email,
       prismaUser.passwordHash,
       prismaUser.companyId,
       prismaUser.createdAt,
       prismaUser.refreshTokenHash,
+      prismaUser.role,
     );
+
+    user.id = prismaUser.id;
+
+    return user;
   }
 }
