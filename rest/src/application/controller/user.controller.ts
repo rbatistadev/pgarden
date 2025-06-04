@@ -16,7 +16,7 @@ export class UserController {
 
   @Post()
   @Roles('ADMIN')
-  async creatUser(
+  async createUser(
     @Body() dto: CreateUserDto,
     @CurrentUser() currentUser: RequestUser,
   ) {
