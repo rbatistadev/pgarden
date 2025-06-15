@@ -44,6 +44,20 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## API documentation
+
+Once the server is running you can access the Swagger UI to explore the
+available endpoints. By default the application listens on port `3001`
+(this can be changed with the `PORT` environment variable). Open your
+browser at:
+
+```
+http://localhost:3001/docs
+```
+
+This page provides an interactive interface to the REST API generated via
+Swagger.
+
 ## Run tests
 
 ```bash
