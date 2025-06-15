@@ -8,6 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtService } from './service/auth/jwt.service';
 import { AUTH_INTERFACE } from 'src/application/model/auth/auth.interface';
 import { JwtStrategy } from './service/auth/jwt.strategy';
+import { AttendancePrismaRepository } from './prisma/repositories/attendance-prisma.repository';
+import { ATTENDANCE_REPOSITORY_INTERFACE } from 'src/domain/model/attendance/attendance.repository';
 
 @Module({
   imports: [PrismaModule, JwtModule.register({})],
@@ -20,6 +22,7 @@ import { JwtStrategy } from './service/auth/jwt.strategy';
     },
     UserPrismaRepository,
     CompanyPrismaRepository,
+    AttendancePrismaRepository,
     {
       provide: USER_REPOSITORY_INTERFACE,
       useClass: UserPrismaRepository,
@@ -28,12 +31,17 @@ import { JwtStrategy } from './service/auth/jwt.strategy';
       provide: COMPANY_REPOSITORY_INTERFACE,
       useClass: CompanyPrismaRepository,
     },
+    {
+      provide: ATTENDANCE_REPOSITORY_INTERFACE,
+      useClass: AttendancePrismaRepository,
+    },
   ],
   exports: [
     UserPrismaRepository,
     AUTH_INTERFACE,
     USER_REPOSITORY_INTERFACE,
     COMPANY_REPOSITORY_INTERFACE,
+    ATTENDANCE_REPOSITORY_INTERFACE,
   ],
 })
 export class InfrastructureModule {}
