@@ -32,6 +32,14 @@ model Company {
   users User[]
 }
 
+model Attendance {
+  id       String   @id @default(uuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  checkIn  DateTime
+  checkOut DateTime?
+}
+
 enum Role {
   ADMIN
   MANAGER
