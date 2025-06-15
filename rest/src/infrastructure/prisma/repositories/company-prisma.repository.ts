@@ -10,7 +10,7 @@ export class CompanyPrismaRepository implements ICompanyRepository {
   async create(company: Company): Promise<Company> {
     const record = await this.prisma.company.create({
       data: {
-        id: company.id,
+        id: company.id ?? undefined,
         name: company.name,
       },
     });
