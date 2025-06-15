@@ -2,7 +2,6 @@ pipeline {
   agent any
 
   environment {
-    DOTENV = credentials('nestjs-dotenv')
     COMPOSE_CMD = "docker compose"
   }
 
@@ -12,11 +11,11 @@ pipeline {
         checkout scm
       }
     }
-    
+
     stage('Prepare .env File') {
       steps {
-        script {
-          writeFile file: '.env', text: "${DOTENV}"
+        withCredentials([file(credentialsId: 'nestjs-env-file', variable: 'DOTENV_FILE')]) {
+          sh 'cp $DOTENV_FILE .env'
         }
       }
     }
@@ -32,6 +31,12 @@ pipeline {
         sh "${COMPOSE_CMD} down || true"
         sh "${COMPOSE_CMD} up -d"
       }
+    }
+  }
+
+  post {
+    always {
+      sh 'rm -f .env'
     }
   }
 }
