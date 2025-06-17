@@ -14,6 +14,8 @@ import { CheckOutService } from './service/attendance/check-out.service';
 import { RequestAbsenceService } from './service/absence/request-absence.service';
 import { ApproveAbsenceService } from './service/absence/approve-absence.service';
 import { SetAgreementService } from './service/agreement/set-agreement.service';
+import { GetAgreementService } from './service/agreement/get-agreement.service';
+import { DeleteAgreementService } from './service/agreement/delete-agreement.service';
 
 @Module({
   imports: [forwardRef(() => DomainModule), InfrastructureModule],
@@ -33,6 +35,8 @@ import { SetAgreementService } from './service/agreement/set-agreement.service';
     RequestAbsenceService,
     ApproveAbsenceService,
     SetAgreementService,
+    GetAgreementService,
+    DeleteAgreementService,
   ],
 })
 export class ApplicationModule {}

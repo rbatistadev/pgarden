@@ -33,6 +33,10 @@ export class AgreementPrismaRepository implements IAgreementRepository {
     return record ? this.toEntity(record) : null;
   }
 
+  async deleteByCompanyId(companyId: string): Promise<void> {
+    await this.prisma.agreement.delete({ where: { companyId } }).catch(() => {});
+  }
+
   private toEntity(record: PrismaAgreement): Agreement {
     return new Agreement(
       record.id,
