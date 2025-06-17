@@ -9,7 +9,7 @@ import { CheckOutService } from '../service/attendance/check-out.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiBearerAuth()
-@Controller('attendance')
+@Controller('attendances')
 @UseGuards(AuthGuard, RolesGuard)
 export class AttendanceController {
   constructor(
