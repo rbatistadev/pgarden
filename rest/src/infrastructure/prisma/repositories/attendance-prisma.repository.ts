@@ -37,6 +37,11 @@ export class AttendancePrismaRepository implements IAttendanceRepository {
   }
 
   private toEntity(record: PrismaAttendance): Attendance {
-    return new Attendance(record.id, record.userId, record.checkIn, record.checkOut);
+    return new Attendance(
+      record.id,
+      record.userId,
+      record.checkIn,
+      record.checkOut,
+    );
   }
 }
