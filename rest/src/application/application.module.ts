@@ -7,18 +7,32 @@ import { AuthLoginService } from './service/auth/auth-login.service';
 import { AuthRegisterService } from './service/auth/auth-register.service';
 import { UserController } from './controller/user.controller';
 import { AttendanceController } from './controller/attendance.controller';
+import { AbsenceController } from './controller/absence.controller';
+import { AgreementController } from './controller/agreement.controller';
 import { CheckInService } from './service/attendance/check-in.service';
 import { CheckOutService } from './service/attendance/check-out.service';
+import { RequestAbsenceService } from './service/absence/request-absence.service';
+import { ApproveAbsenceService } from './service/absence/approve-absence.service';
+import { SetAgreementService } from './service/agreement/set-agreement.service';
 
 @Module({
   imports: [forwardRef(() => DomainModule), InfrastructureModule],
-  controllers: [UserController, AuthController, AttendanceController],
+  controllers: [
+    UserController,
+    AuthController,
+    AttendanceController,
+    AbsenceController,
+    AgreementController,
+  ],
   providers: [
     CreateUserService,
     AuthLoginService,
     AuthRegisterService,
     CheckInService,
     CheckOutService,
+    RequestAbsenceService,
+    ApproveAbsenceService,
+    SetAgreementService,
   ],
 })
 export class ApplicationModule {}

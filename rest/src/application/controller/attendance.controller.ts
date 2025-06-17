@@ -1,6 +1,6 @@
 import { Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../service/auth/auth.guard';
-import { RolesGuard } from '../service/rol/rolges.guard';
+import { RolesGuard } from '../service/rol/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { RequestUser } from '../model/auth/auth.model';
