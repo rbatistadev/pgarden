@@ -47,21 +47,23 @@ export class AuthRegisterService {
       'ADMIN',
     );
 
+    const createdUser = await this.userRepository.create(user);
+
     const accessToken = this.authService.generateAccessToken({
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-      companyId: user.companyId,
+      userId: createdUser.id,
+      email: createdUser.email,
+      role: createdUser.role,
+      companyId: createdUser.companyId,
     });
     const refreshToken = this.authService.generateRefreshToken({
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-      companyId: user.companyId,
+      userId: createdUser.id,
+      email: createdUser.email,
+      role: createdUser.role,
+      companyId: createdUser.companyId,
     });
-    await user.setRefreshToken(refreshToken);
+    await createdUser.setRefreshToken(refreshToken);
 
-    await this.userRepository.create(user);
+    await this.userRepository.update(createdUser);
 
     return { token: accessToken, refreshToken };
   }
