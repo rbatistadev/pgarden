@@ -26,12 +26,16 @@ model User {
   createdAt        DateTime @default(now())
 
   Attendance Attendance[]
+
+  Absence Absence[]
 }
 
 model Company {
   id    String @id @default(uuid())
   name  String @unique
   users User[]
+
+  Agreement Agreement[]
 }
 
 model Attendance {
@@ -40,6 +44,34 @@ model Attendance {
   user     User      @relation(fields: [userId], references: [id])
   checkIn  DateTime
   checkOut DateTime?
+}
+
+model Agreement {
+  id           String  @id @default(uuid())
+  companyId    String  @unique
+  company      Company @relation(fields: [companyId], references: [id])
+  vacationDays Int
+  medicalDays  Int
+  deathDays    Int
+  movingDays   Int
+}
+
+model Absence {
+  id        String      @id @default(uuid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  type      AbsenceType
+  startDate DateTime
+  endDate   DateTime
+  days      Int
+  approved  Boolean     @default(false)
+}
+
+enum AbsenceType {
+  VACATION
+  MEDICAL
+  DEATH
+  MOVING
 }
 
 enum Role {
