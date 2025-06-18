@@ -20,12 +20,13 @@ export class AbsenceController {
 
   @Post()
   @Roles('USER')
-  request(
-    @Body() dto: RequestAbsenceDto,
-    @CurrentUser() user: RequestUser,
-  ) {
+  request(@Body() dto: RequestAbsenceDto, @CurrentUser() user: RequestUser) {
     return this.requestAbsenceService.execute(
-      { type: dto.type, startDate: new Date(dto.startDate), endDate: new Date(dto.endDate) },
+      {
+        type: dto.type,
+        startDate: new Date(dto.startDate),
+        endDate: new Date(dto.endDate),
+      },
       user,
     );
   }

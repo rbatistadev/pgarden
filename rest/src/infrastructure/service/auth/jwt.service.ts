@@ -1,8 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService as NestJsJwtService } from '@nestjs/jwt';
-import { TokenModel, RequestUser } from '../../../application/model/auth/auth.model';
+import {
+  TokenModel,
+  RequestUser,
+} from '../../../application/model/auth/auth.model';
 import { IAuth } from 'src/application/model/auth/auth.interface';
+import { Role } from 'src/domain/model/role/role';
+
+interface JwtPayload {
+  sub: string;
+  email: string;
+  role: Role; // or use: string if dynamic
+}
 
 @Injectable()
 export class JwtService implements IAuth {
@@ -17,7 +27,7 @@ export class JwtService implements IAuth {
         sub: payload.userId,
         email: payload.email,
         role: payload.role,
-        companyId: (payload as any).companyId,
+        companyId: payload.companyId,
       },
       {
         secret: this.config.get('JWT_ACCESS_SECRET'),
@@ -32,7 +42,7 @@ export class JwtService implements IAuth {
         sub: payload.userId,
         email: payload.email,
         role: payload.role,
-        companyId: (payload as any).companyId,
+        companyId: payload.companyId,
       },
       {
         secret: this.config.get('JWT_REFRESH_SECRET'),
@@ -42,14 +52,14 @@ export class JwtService implements IAuth {
   }
 
   verifyRefreshToken(token: string): TokenModel {
-    const payload = this.jwt.verify(token, {
+    const payload: JwtPayload = this.jwt.verify(token, {
       secret: this.config.get('JWT_REFRESH_SECRET'),
-    }) as Record<string, unknown>;
+    });
 
     return {
-      userId: (payload.sub as string) ?? null,
-      email: payload.email as string,
-      role: payload.role as never,
+      userId: payload.sub,
+      email: payload.email,
+      role: payload.role,
     };
   }
 }

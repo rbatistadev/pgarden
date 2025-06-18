@@ -29,12 +29,16 @@ export class AgreementPrismaRepository implements IAgreementRepository {
   }
 
   async findByCompanyId(companyId: string): Promise<Agreement | null> {
-    const record = await this.prisma.agreement.findUnique({ where: { companyId } });
+    const record = await this.prisma.agreement.findUnique({
+      where: { companyId },
+    });
     return record ? this.toEntity(record) : null;
   }
 
   async deleteByCompanyId(companyId: string): Promise<void> {
-    await this.prisma.agreement.delete({ where: { companyId } }).catch(() => {});
+    await this.prisma.agreement
+      .delete({ where: { companyId } })
+      .catch(() => {});
   }
 
   private toEntity(record: PrismaAgreement): Agreement {
