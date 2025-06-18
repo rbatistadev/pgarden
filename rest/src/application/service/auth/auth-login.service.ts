@@ -35,6 +35,8 @@ export class AuthLoginService {
     });
     await user.setRefreshToken(refreshToken);
 
+    await this.userRepository.update(user);
+
     return { token: accessToken, refreshToken };
   }
 }
