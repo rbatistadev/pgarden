@@ -32,6 +32,16 @@ export class UserPrismaRepository implements IUserRepository {
     return this.toEntity(createdUser);
   }
 
+  async update(user: User): Promise<User> {
+    const updatedUser = await this.prisma.user.update({
+      where: { id: user.id! },
+      data: {
+        refreshTokenHash: user.getRefreshTokenHash(),
+      },
+    });
+    return this.toEntity(updatedUser);
+  }
+
   private toEntity(prismaUser: PrismaUser): User {
     const user = new User(
       prismaUser.name,
