@@ -6,5 +6,8 @@ export interface IAbsenceRepository {
   create(absence: Absence): Promise<Absence>;
   findById(id: string): Promise<Absence | null>;
   approve(id: string): Promise<Absence>;
-  countApprovedDaysByUserAndType(userId: string, type: AbsenceType): Promise<number>;
+  countApprovedDaysByUserAndType(
+    userId: string,
+    type: AbsenceType,
+  ): Promise<number>;
 }

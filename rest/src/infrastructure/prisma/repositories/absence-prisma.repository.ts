@@ -2,10 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../service/prisma.service';
 import { Absence } from 'src/domain/model/absence/absence.entity';
 import { IAbsenceRepository } from 'src/domain/model/absence/absence.repository';
-import {
-  Absence as PrismaAbsence,
-  AbsenceType as PrismaAbsenceType,
-} from '@prisma/client';
+import { Absence as PrismaAbsence } from '@prisma/client';
 import { AbsenceType } from 'src/domain/model/absence/absence-type';
 
 @Injectable()
@@ -16,7 +13,7 @@ export class AbsencePrismaRepository implements IAbsenceRepository {
     const record = await this.prisma.absence.create({
       data: {
         userId: absence.userId,
-        type: absence.type as PrismaAbsenceType,
+        type: absence.type,
         startDate: absence.startDate,
         endDate: absence.endDate,
         days: absence.days,

@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '../service/auth/auth.guard';
 import { RolesGuard } from '../service/rol/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
@@ -22,10 +30,7 @@ export class AgreementController {
 
   @Put()
   @Roles('MANAGER')
-  set(
-    @Body() dto: SetAgreementDto,
-    @CurrentUser() user: RequestUser,
-  ) {
+  set(@Body() dto: SetAgreementDto, @CurrentUser() user: RequestUser) {
     return this.setAgreementService.execute(user.companyId, dto);
   }
 
@@ -37,10 +42,7 @@ export class AgreementController {
 
   @Post()
   @Roles('MANAGER')
-  create(
-    @Body() dto: SetAgreementDto,
-    @CurrentUser() user: RequestUser,
-  ) {
+  create(@Body() dto: SetAgreementDto, @CurrentUser() user: RequestUser) {
     return this.setAgreementService.execute(user.companyId, dto);
   }
 
