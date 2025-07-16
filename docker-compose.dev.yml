@@ -4,16 +4,18 @@ services:
   web:
     build:
       context: .
-      dockerfile: docker/web/Dockerfile
+      dockerfile: docker/web/Dockerfile.dev
     container_name: pgarden-web
     ports:
       - "3000:3000"
     restart: unless-stopped
+    volumes:
+      - ./web:/app
 
   rest:
     build:
       context: ./rest
-      dockerfile: ../docker/rest/Dockerfile
+      dockerfile: ../docker/rest/Dockerfile.dev
     container_name: pgarden-rest
     ports:
       - "4000:3001"
@@ -21,6 +23,8 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+    volumes:
+      - ./rest:/app
 
   db:
     image: postgres:15
