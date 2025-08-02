@@ -7,5 +7,5 @@ export type TokenModel = {
 };
 
 export type RequestUser = TokenModel & {
-  companyId: string;
+  companyId: string | null;
 };

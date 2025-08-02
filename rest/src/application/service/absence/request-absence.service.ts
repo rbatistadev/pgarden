@@ -30,7 +30,7 @@ export class RequestAbsenceService {
     }
 
     const agreement = await this.agreementRepository.findByCompanyId(
-      currentUser.companyId,
+      currentUser.companyId ?? undefined,
     );
     if (!agreement) {
       throw new BadRequestException('Agreement not configured');

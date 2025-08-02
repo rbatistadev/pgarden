@@ -1,7 +1,14 @@
 'use client';
 import React from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { FieldPath, FieldValues, useFormContext } from 'react-hook-form';
+import {
+  Controller,
+  ControllerProps,
+  FieldPath,
+  FieldValues,
+  useFormContext,
+} from 'react-hook-form';
+import { cn } from '../../lib/utils';
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -58,3 +65,51 @@ const FormControl = React.forwardRef<
   );
 });
 FormControl.displayName = 'FormControl';
+
+const FormField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
+  ...props
+}: ControllerProps<TFieldValues, TName>) => {
+  return (
+    <FormFieldContext.Provider value={{ name: props.name }}>
+      <Controller {...props} />
+    </FormFieldContext.Provider>
+  );
+};
+
+const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => {
+    const id = React.useId();
+
+    return (
+      <FormItemContext.Provider value={{ id }}>
+        <div ref={ref} className={cn('space-y-2', className)} {...props} />
+      </FormItemContext.Provider>
+    );
+  },
+);
+FormItem.displayName = 'FormItem';
+
+const FormError = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, children, ...props }, ref) => {
+  const { error, formMessageId } = useFormField();
+  const errorMessage = error?.message || error?.root?.message;
+  const body = error ? String(errorMessage) : children;
+
+  if (!body) {
+    return null;
+  }
+
+  return (
+    <p ref={ref} id={formMessageId} className={cn('text-error text-sm', className)} {...props}>
+      {body}
+    </p>
+  );
+});
+FormError.displayName = 'FormError';
+
+export { useFormField, FormItem, FormControl, FormField, FormError };

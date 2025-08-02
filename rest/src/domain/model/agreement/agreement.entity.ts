@@ -1,5 +1,10 @@
 import { BaseEntity } from '../base.entity.abstract';
 
+/**
+ * Represents an agreement defining various leave day entitlements for a company.
+ *
+ * @extends BaseEntity
+ */
 export class Agreement extends BaseEntity {
   constructor(
     public readonly id: string | null,

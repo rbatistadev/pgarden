@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { AbsenceType } from 'src/domain/model/absence/absence-type';
 import {
   ABSENCE_REPOSITORY_INTERFACE,
@@ -18,6 +13,7 @@ import {
   IUserRepository,
   USER_REPOSITORY_INTERFACE,
 } from 'src/domain/model/user/user.repository.interface';
+import { DomainException } from 'src/domain/services/domain-exception';
 
 @Injectable()
 export class ApproveAbsenceService {
@@ -32,17 +28,24 @@ export class ApproveAbsenceService {
 
   async execute(absenceId: string) {
     const absence = await this.absenceRepository.findById(absenceId);
-    if (!absence) throw new NotFoundException('Absence not found');
+    if (!absence) {
+      throw new DomainException('Absence not found', 404);
+    }
 
     if (absence.approved) return absence;
 
     const user = await this.userRepository.findById(absence.userId);
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) {
+      throw new DomainException('User not found', 404);
+    }
 
     const agreement = await this.agreementRepository.findByCompanyId(
-      user.companyId,
+      user.companyId ?? undefined,
     );
-    if (!agreement) throw new BadRequestException('Agreement not configured');
+
+    if (!agreement) {
+      throw new BadRequestException('Agreement not configured');
+    }
 
     const used = await this.absenceRepository.countApprovedDaysByUserAndType(
       user.id!,

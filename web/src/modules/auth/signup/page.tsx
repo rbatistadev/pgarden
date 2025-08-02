@@ -1,21 +1,18 @@
-import { FormWrapper } from '@/modules/auth/components/form-wrapper';
 import { Metadata } from 'next';
-import { LoginForm } from './components/login-form';
-import { Suspense } from 'react';
+import { FormWrapper } from '../components/form-wrapper';
+import { SignupForm } from './components/signup.form';
 
 export const metadata: Metadata = {
-  title: 'Login',
+  title: 'Signup',
   description: 'Open-source Experience Management. Free & open source.',
 };
 
-export const LoginPage = async () => {
+export const SignupPage = () => {
   return (
     <div className="grid min-h-screen w-full bg-gradient-to-tr from-slate-100 ">
       <div className="col-span-3 flex flex-col items-center justify-center">
         <FormWrapper>
-          <Suspense>
-            <LoginForm />
-          </Suspense>
+          <SignupForm />
         </FormWrapper>
       </div>
     </div>

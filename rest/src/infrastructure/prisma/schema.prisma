@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "windows", "linux-musl-openssl-3.0.x"]
@@ -15,56 +9,53 @@ datasource db {
 }
 
 model User {
-  id               String   @id @default(uuid())
+  id               String       @id @default(uuid())
+  email            String       @unique
   name             String
-  email            String   @unique
+  createdAt        DateTime     @default(now())
+  companyId        String?
   passwordHash     String
   refreshTokenHash String?
-  companyId        String
-  role             Role     @default(USER)
-  company          Company  @relation(fields: [companyId], references: [id])
-  createdAt        DateTime @default(now())
-
-  Attendance Attendance[]
-
-  Absence Absence[]
+  role             Role         @default(USER)
+  Absence          Absence[]
+  Attendance       Attendance[]
+  company          Company?     @relation(fields: [companyId], references: [id])
 }
 
 model Company {
-  id    String @id @default(uuid())
-  name  String @unique
-  users User[]
-
-  Agreement Agreement[]
+  id        String     @id @default(uuid())
+  name      String     @unique
+  Agreement Agreement?
+  users     User[]
 }
 
 model Attendance {
   id       String    @id @default(uuid())
   userId   String
-  user     User      @relation(fields: [userId], references: [id])
   checkIn  DateTime
   checkOut DateTime?
+  user     User      @relation(fields: [userId], references: [id])
 }
 
 model Agreement {
   id           String  @id @default(uuid())
   companyId    String  @unique
-  company      Company @relation(fields: [companyId], references: [id])
   vacationDays Int
   medicalDays  Int
   deathDays    Int
   movingDays   Int
+  company      Company @relation(fields: [companyId], references: [id])
 }
 
 model Absence {
   id        String      @id @default(uuid())
   userId    String
-  user      User        @relation(fields: [userId], references: [id])
   type      AbsenceType
   startDate DateTime
   endDate   DateTime
   days      Int
   approved  Boolean     @default(false)
+  user      User        @relation(fields: [userId], references: [id])
 }
 
 enum AbsenceType {

@@ -7,33 +7,21 @@ import { User } from 'src/domain/model/user/user.entity';
 import * as bcrypt from 'bcrypt';
 import { AUTH_INTERFACE, IAuth } from '../../model/auth/auth.interface';
 import { RegisterDto } from '../../model/auth/register.dto';
-import {
-  COMPANY_REPOSITORY_INTERFACE,
-  ICompanyRepository,
-} from 'src/domain/model/company/company.repository';
-import { Company } from 'src/domain/model/company/company.entity';
+import { RegisterResponseDto } from 'src/application/model/auth/register-response.dto';
 
 @Injectable()
 export class AuthRegisterService {
   constructor(
     @Inject(USER_REPOSITORY_INTERFACE)
     private readonly userRepository: IUserRepository,
-    @Inject(COMPANY_REPOSITORY_INTERFACE)
-    private readonly companyRepository: ICompanyRepository,
     @Inject(AUTH_INTERFACE)
     private readonly authService: IAuth,
   ) {}
 
-  async execute(dto: RegisterDto) {
+  async execute(dto: RegisterDto): Promise<RegisterResponseDto> {
     const existing = await this.userRepository.findByEmail(dto.email);
-    if (existing) throw new Error('Email already in use');
-
-    const company = await this.companyRepository.create(
-      new Company(null, dto.companyName),
-    );
-
-    if (!company.id) {
-      throw new Error('Company not found');
+    if (existing) {
+      throw new Error('Email already in use');
     }
 
     const passwordHash = await bcrypt.hash(dto.password, 10);
@@ -41,7 +29,7 @@ export class AuthRegisterService {
       dto.name,
       dto.email,
       passwordHash,
-      company.id,
+      null,
       new Date(),
       null,
       'ADMIN',

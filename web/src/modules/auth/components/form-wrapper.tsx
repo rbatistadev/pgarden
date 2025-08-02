@@ -15,7 +15,7 @@ export const FormWrapper = ({ children }: FormWrapperProps) => {
             href="https://formbricks.com?utm_source=ce"
             rel="noopener noreferrer"
           >
-            <Logo className="mx-auto w-3/4" />
+            <Logo />
           </Link>
         </div>
         {children}

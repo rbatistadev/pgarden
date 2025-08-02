@@ -1,5 +1,5 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { createAxiosInstance } from "../config/axios.config";
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { createAxiosInstance } from '../config/axios.config';
 
 export abstract class APIService {
   protected baseURL: string;
