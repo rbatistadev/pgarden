@@ -1,97 +1,186 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { AuthService } from '@/core/services/auth.service';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { Button } from '@/modules/ui/components/button';
 
-interface ILoginForm {
-  email: string;
-  password: string;
-}
-type LoginSource = 'google' | 'microsoft' | 'email';
-interface ILogin {
-  data: ILoginForm;
-  source: LoginSource;
-}
+import { useSearchParams } from 'next/navigation';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { Button } from '@/modules/ui/components/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+import { FormControl, FormError, FormField, FormItem } from '@/modules/ui/components/form';
+import { PasswordInput } from '@/modules/ui/components/input/password';
+import Link from 'next/dist/client/link';
+import { authService } from '../../services';
+
+const ZLoginForm = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  totpCode: z.string().optional(),
+  backupCode: z.string().optional(),
+});
+
+type TLoginForm = z.infer<typeof ZLoginForm>;
 
 export const LoginForm = () => {
-  const router = useRouter();
-  const authService = new AuthService();
-  const { register, handleSubmit } = useForm<ILoginForm>();
-  const [error, setError] = useState('');
+  const searchParams = useSearchParams();
+  const emailRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [showLogin, setShowLogin] = useState(false);
 
-  const onSubmit: SubmitHandler<ILogin> = async props => {
-    const { data, source } = props;
+  const form = useForm<TLoginForm>({
+    defaultValues: {
+      email: searchParams?.get('email') ?? '',
+      password: '',
+      totpCode: '',
+      backupCode: '',
+    },
+    resolver: zodResolver(ZLoginForm),
+  });
 
-    if (source === 'email') {
-      try {
-        const { token } = await authService.login({ email: data.email, password: data.password });
+  const onSubmit: SubmitHandler<TLoginForm> = async data => {
+    try {
+      const signInResponse = await authService.login({
+        email: data.email,
+        password: data.password,
+      });
 
-        localStorage.setItem('token', token); // 🔐 Guardamos el token
-
-        router.push('/dashboard');
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        const message = err?.response?.data?.message || 'Error al iniciar sesión';
-        setError(message);
+      if (signInResponse?.error) {
+        toast.error(signInResponse.error);
+        return;
       }
+
+      // TODO: Save with zustand login data, and redirect to dashboard
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error.toString());
     }
   };
 
   return (
-    <>
-      <form className="w-full max-w-sm space-y-4 flex flex-col items-center">
-        <p>Login to your account</p>
-        <input
-          type="email"
-          placeholder="Email"
-          {...register('email')}
-          className="block w-full border border-[var(--primary-300)] rounded p-2 focus:outline-none focus:border-[var(--primary-500)]"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          {...register('password')}
-          className="block w-full border border-[var(--primary-300)] rounded p-2 focus:outline-none focus:border-[var(--primary-500)]"
-        />
-        <Button
-          onClick={handleSubmit(data =>
-            onSubmit({
-              data,
-              source: 'email',
-            }),
-          )}
-          className="relative w-full justify-center"
-        >
-          Login with Email
-        </Button>
-        <Button
-          onClick={handleSubmit(data =>
-            onSubmit({
-              data,
-              source: 'google',
-            }),
-          )}
-          className="relative w-full justify-center"
-          variant="secondary"
-        >
-          Continue with Google
-        </Button>
-        <Button
-          onClick={handleSubmit(data =>
-            onSubmit({
-              data,
-              source: 'microsoft',
-            }),
-          )}
-          className="relative w-full justify-center"
-          variant="secondary"
-        >
-          Continue with Microsoft
-        </Button>
-      </form>
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-    </>
+    <FormProvider {...form}>
+      <div className="text-center">
+        <h1 className="mb-4 text-slate-700">Login to your account</h1>
+        <div className="space-y-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            {showLogin && (
+              <div className={'space-y-2'}>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field, fieldState: { error } }) => (
+                    <FormItem className="w-full">
+                      <FormControl>
+                        <div>
+                          <input
+                            id="email"
+                            type="email"
+                            autoComplete="email"
+                            required
+                            value={field.value}
+                            onChange={email => field.onChange(email)}
+                            placeholder="work@email.com"
+                            className="focus:border-brand-dark focus:ring-brand-dark block w-full rounded-md border-slate-300 shadow-sm sm:text-sm"
+                          />
+                          {error?.message && (
+                            <FormError className="text-left">{error.message}</FormError>
+                          )}
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field, fieldState: { error } }) => (
+                    <FormItem className="w-full">
+                      <FormControl>
+                        <div>
+                          <PasswordInput
+                            id="password"
+                            autoComplete="current-password"
+                            placeholder="*******"
+                            aria-placeholder="password"
+                            aria-label="password"
+                            aria-required="true"
+                            required
+                            className="focus:border-brand-dark focus:ring-brand-dark block w-full rounded-md border-slate-300 pr-8 shadow-sm sm:text-sm"
+                            value={field.value}
+                            onChange={password => field.onChange(password)}
+                          />
+                          {error?.message && (
+                            <FormError className="text-left">{error.message}</FormError>
+                          )}
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <div className="ml-1 text-right transition-all duration-500 ease-in-out">
+                  <Link
+                    href="/auth/forgot-password"
+                    className="hover:text-brand-dark text-xs text-slate-500"
+                  >
+                    Forgot your password?
+                  </Link>
+                </div>
+              </div>
+            )}
+            <Button
+              onClick={() => {
+                if (!showLogin) {
+                  setShowLogin(true);
+                  // Add a slight delay before focusing the input field to ensure it's visible
+                  setTimeout(() => emailRef.current?.focus(), 100);
+                } else if (formRef.current) {
+                  formRef.current.requestSubmit();
+                }
+              }}
+              className="relative w-full justify-center"
+              loading={form.formState.isSubmitting}
+            >
+              Login with Email
+            </Button>
+            {/* TODO : ADD OTHER LOGIN OPTIONS */}
+            {/* <Button
+              onClick={form.handleSubmit(data =>
+                onSubmit({
+                  data,
+                  source: 'google',
+                }),
+              )}
+              className="relative w-full justify-center"
+              variant="secondary"
+            >
+              Continue with Google
+            </Button>
+            <Button
+              onClick={form.handleSubmit(data =>
+                onSubmit({
+                  data,
+                  source: 'microsoft',
+                }),
+              )}
+              className="relative w-full justify-center"
+              variant="secondary"
+            >
+              Continue with Microsoft
+            </Button> */}
+          </form>
+        </div>
+
+        <div className="mt-9 text-center text-xs">
+          <span className="leading-5 text-slate-500">New to People Garden HR?</span>
+          <br />
+          <Link
+            href="/auth/signup"
+            className="font-semibold text-slate-600 underline hover:text-slate-700"
+          >
+            Create an account
+          </Link>
+        </div>
+      </div>
+    </FormProvider>
   );
 };

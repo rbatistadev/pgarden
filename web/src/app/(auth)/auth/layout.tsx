@@ -1,12 +1,9 @@
-
-const AppLayout = async ({ children }: Readonly<{
-    children: React.ReactNode;
+const AppLayout = async ({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
 }>) => {
-    return (
-        <>
-            {children}
-        </>
-    )
-}
+  return <>{children}</>;
+};
 
-export default AppLayout
+export default AppLayout;

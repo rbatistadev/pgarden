@@ -1,6 +1,7 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
+import unusedImportsPlugin from 'eslint-plugin-unused-imports';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,7 +19,11 @@ const eslintConfig = [
   ),
   // 👉 Custom rules
   {
+    plugins: {
+      'unused-imports': unusedImportsPlugin,
+    },
     rules: {
+      'unused-imports/no-unused-imports': 'error',
       'no-console': ['error', { allow: ['warn', 'error'] }], // ❌ blocks console.log, allows warn/error
       'no-debugger': 'error', // ❌ blocks all debugger statements
     },
