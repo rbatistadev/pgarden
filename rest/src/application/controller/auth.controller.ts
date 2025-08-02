@@ -4,6 +4,7 @@ import { AuthRegisterService } from '../service/auth/auth-register.service';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { RegisterDto } from '../model/auth/register.dto';
 import { LoginDto } from '../model/auth/login.dto';
+import { RegisterResponseDto } from '../model/auth/register-response.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -14,8 +15,8 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  @ApiCreatedResponse({ type: RegisterDto })
-  register(@Body() dto: RegisterDto) {
+  @ApiCreatedResponse({ type: RegisterResponseDto })
+  register(@Body() dto: RegisterDto): Promise<RegisterResponseDto> {
     return this.registerService.execute(dto);
   }
 

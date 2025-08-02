@@ -17,6 +17,7 @@ import { GetAgreementService } from '../service/agreement/get-agreement.service'
 import { DeleteAgreementService } from '../service/agreement/delete-agreement.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { SetAgreementDto } from '../model/agreement/set-agreement.dto';
+import { DomainException } from 'src/domain/services/domain-exception';
 
 @ApiBearerAuth()
 @Controller('agreements')
@@ -31,24 +32,40 @@ export class AgreementController {
   @Put()
   @Roles('MANAGER')
   set(@Body() dto: SetAgreementDto, @CurrentUser() user: RequestUser) {
+    if (user.companyId === null) {
+      throw new DomainException('Company cannot be null', 403);
+    }
+
     return this.setAgreementService.execute(user.companyId, dto);
   }
 
   @Get()
   @Roles('MANAGER')
   get(@CurrentUser() user: RequestUser) {
+    if (user.companyId === null) {
+      throw new DomainException('Company cannot be null', 403);
+    }
+
     return this.getAgreementService.execute(user.companyId);
   }
 
   @Post()
   @Roles('MANAGER')
   create(@Body() dto: SetAgreementDto, @CurrentUser() user: RequestUser) {
+    if (user.companyId === null) {
+      throw new DomainException('Company cannot be null', 403);
+    }
+
     return this.setAgreementService.execute(user.companyId, dto);
   }
 
   @Delete()
   @Roles('MANAGER')
   remove(@CurrentUser() user: RequestUser) {
+    if (user.companyId === null) {
+      throw new DomainException('Company cannot be null', 403);
+    }
+
     return this.deleteAgreementService.execute(user.companyId);
   }
 }

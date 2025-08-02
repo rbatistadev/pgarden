@@ -28,7 +28,7 @@ export class AgreementPrismaRepository implements IAgreementRepository {
     return this.toEntity(record);
   }
 
-  async findByCompanyId(companyId: string): Promise<Agreement | null> {
+  async findByCompanyId(companyId?: string): Promise<Agreement | null> {
     const record = await this.prisma.agreement.findUnique({
       where: { companyId },
     });

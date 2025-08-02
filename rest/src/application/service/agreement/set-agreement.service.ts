@@ -4,6 +4,7 @@ import {
   IAgreementRepository,
 } from 'src/domain/model/agreement/agreement.repository';
 import { Agreement } from 'src/domain/model/agreement/agreement.entity';
+import { SetAgreementDto } from 'src/application/model/agreement/set-agreement.dto';
 
 @Injectable()
 export class SetAgreementService {
@@ -12,15 +13,7 @@ export class SetAgreementService {
     private readonly agreementRepository: IAgreementRepository,
   ) {}
 
-  async execute(
-    companyId: string,
-    dto: {
-      vacationDays: number;
-      medicalDays: number;
-      deathDays: number;
-      movingDays: number;
-    },
-  ) {
+  async execute(companyId: string, dto: SetAgreementDto) {
     const agreement = new Agreement(
       null,
       companyId,

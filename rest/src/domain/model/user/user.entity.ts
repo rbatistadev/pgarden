@@ -24,7 +24,7 @@ export class User {
     public readonly name: string,
     public readonly email: string,
     public readonly passwordHash: string,
-    public readonly companyId: string,
+    public readonly companyId: string | null,
     public readonly createdAt: Date,
     refreshTokenHash: string | null,
     public readonly role: Role = 'USER',
