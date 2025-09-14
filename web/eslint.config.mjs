@@ -23,6 +23,7 @@ const eslintConfig = [
       'unused-imports': unusedImportsPlugin,
     },
     rules: {
+      '@typescript-eslint/no-explicit-any': 'error',
       'unused-imports/no-unused-imports': 'error',
       'no-console': ['error', { allow: ['warn', 'error'] }], // ❌ blocks console.log, allows warn/error
       'no-debugger': 'error', // ❌ blocks all debugger statements

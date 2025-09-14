@@ -3,7 +3,7 @@ import { createAxiosInstance } from '../config/axios.config';
 
 export abstract class APIService {
   protected baseURL: string;
-  private axiosInstance: AxiosInstance;
+  private readonly axiosInstance: AxiosInstance;
 
   constructor(baseURL: string) {
     this.baseURL = baseURL;
@@ -17,8 +17,8 @@ export abstract class APIService {
     });
   }
 
-  post(url: string, data = {}, config: AxiosRequestConfig = {}) {
-    return this.axiosInstance.post(url, data, config);
+  async post(url: string, data = {}, config: AxiosRequestConfig = {}) {
+    return await this.axiosInstance.post(url, data, config);
   }
 
   put(url: string, data = {}, config: AxiosRequestConfig = {}) {

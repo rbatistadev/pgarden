@@ -1,16 +1,18 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from '@/modules/ui/components/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FormControl, FormError, FormField, FormItem } from '@/modules/ui/components/form';
 import { PasswordInput } from '@/modules/ui/components/input/password';
 import Link from 'next/dist/client/link';
 import { authService } from '../../services';
+import { useAuth } from '@/lib/store/auth.store';
+import { AxiosError } from 'axios';
 
 const ZLoginForm = z.object({
   email: z.string().email(),
@@ -22,7 +24,9 @@ const ZLoginForm = z.object({
 type TLoginForm = z.infer<typeof ZLoginForm>;
 
 export const LoginForm = () => {
+  const { setLoginData } = useAuth();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [showLogin, setShowLogin] = useState(false);
@@ -45,15 +49,21 @@ export const LoginForm = () => {
       });
 
       if (signInResponse?.error) {
-        toast.error(signInResponse.error);
+        toast.error(JSON.stringify(signInResponse.error));
         return;
       }
 
-      // TODO: Save with zustand login data, and redirect to dashboard
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      toast.error(error.toString());
+      if (signInResponse?.token) {
+        setLoginData({
+          token: signInResponse.token,
+          refreshToken: signInResponse.refreshToken,
+        });
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || 'An error occurred during login.');
+      }
     }
   };
 

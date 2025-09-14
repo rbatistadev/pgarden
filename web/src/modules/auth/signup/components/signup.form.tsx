@@ -52,85 +52,83 @@ export const SignupForm = () => {
       <h1 className="mb-4 text-slate-700">Create your PeopleGarden account</h1>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <>
-            <div className="space-y-2">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field, fieldState: { error } }) => (
-                  <FormItem className="w-full">
-                    <FormControl>
-                      <div>
-                        <Input
-                          data-testid="signup-name"
-                          value={field.value}
-                          name="name"
-                          autoFocus
-                          onChange={e => field.onChange(e.target.value)}
-                          placeholder="Full name"
-                          className="bg-white"
-                        />
-                        {error?.message && (
-                          <FormError className="text-left">{error.message}</FormError>
-                        )}
-                      </div>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field, fieldState: { error } }) => (
-                  <FormItem className="w-full">
-                    <FormControl>
-                      <div>
-                        <Input
-                          data-testid="signup-email"
-                          value={field.value}
-                          name="email"
-                          onChange={e => field.onChange(e.target.value)}
-                          placeholder="work@email.com"
-                          className="bg-white"
-                        />
-                        {error?.message && (
-                          <FormError className="text-left">{error.message}</FormError>
-                        )}
-                      </div>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field, fieldState: { error } }) => (
-                  <FormItem className="w-full">
-                    <FormControl>
-                      <div>
-                        <PasswordInput
-                          data-testid="signup-password"
-                          id="password"
-                          name="password"
-                          value={field.value}
-                          onChange={e => field.onChange(e.target.value)}
-                          autoComplete="current-password"
-                          placeholder="*******"
-                          aria-placeholder="password"
-                          required
-                          className="focus:border-brand-dark focus:ring-brand-dark block w-full rounded-md shadow-sm sm:text-sm"
-                        />
-                        {error?.message && (
-                          <FormError className="text-left">{error.message}</FormError>
-                        )}
-                      </div>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-            <PasswordChecks password={form.watch('password')} />
-          </>
+          <div className="space-y-2">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field, fieldState: { error } }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <div>
+                      <Input
+                        data-testid="signup-name"
+                        value={field.value}
+                        name="name"
+                        autoFocus
+                        onChange={e => field.onChange(e.target.value)}
+                        placeholder="Full name"
+                        className="bg-white"
+                      />
+                      {error?.message && (
+                        <FormError className="text-left">{error.message}</FormError>
+                      )}
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field, fieldState: { error } }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <div>
+                      <Input
+                        data-testid="signup-email"
+                        value={field.value}
+                        name="email"
+                        onChange={e => field.onChange(e.target.value)}
+                        placeholder="work@email.com"
+                        className="bg-white"
+                      />
+                      {error?.message && (
+                        <FormError className="text-left">{error.message}</FormError>
+                      )}
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field, fieldState: { error } }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <div>
+                      <PasswordInput
+                        data-testid="signup-password"
+                        id="password"
+                        name="password"
+                        value={field.value}
+                        onChange={e => field.onChange(e.target.value)}
+                        autoComplete="current-password"
+                        placeholder="*******"
+                        aria-placeholder="password"
+                        required
+                        className="focus:border-brand-dark focus:ring-brand-dark block w-full rounded-md shadow-sm sm:text-sm"
+                      />
+                      {error?.message && (
+                        <FormError className="text-left">{error.message}</FormError>
+                      )}
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          <PasswordChecks password={form.watch('password')} />
           <Button
             data-testid="signup-submit"
             type="submit"
