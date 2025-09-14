@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { LoginRequest, LoginResponse } from '@/lib/models/auth';
 import { APIService } from '@/lib/services/api.service';
 
 type ISignupRequest = {
@@ -17,7 +17,7 @@ export class AuthService extends APIService {
     super(process.env.NEXT_PUBLIC_API_BASE_URL ?? '');
   }
 
-  async login(data: any): Promise<any> {
+  async login(data: LoginRequest): Promise<LoginResponse> {
     const response = await this.post('/auth/login', data);
     return response.data;
   }
