@@ -7,7 +7,7 @@ export interface AuthStore {
   setLoginData: (data: LoginResponse) => Promise<void>;
 }
 
-export const useAuth = create<AuthStore>()(
+export const useAuthStore = create<AuthStore>()(
   persist(
     set => ({
       loginData: undefined,

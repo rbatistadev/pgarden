@@ -1,5 +1,5 @@
 'use client';
-import { cn } from '@/modules/ui/lib/utils';
+import { cn } from '@/modules/ui/lib/cn';
 import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';

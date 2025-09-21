@@ -5,15 +5,18 @@
   "scripts": {
     "start": "next start",
     "build": "next build",
-    "dev": "WATCHPACK_POLLING=true next dev --port 3000",
+    "start:dev": "WATCHPACK_POLLING=true next dev --port 3000",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
     "@tailwindcss/forms": "0.5.10",
     "@tailwindcss/typography": "0.5.16",
     "axios": "^1.10.0",
+    "boring-avatars": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.525.0",
@@ -29,19 +32,31 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^4.1.1",
     "@eslint/eslintrc": "^3",
+    "@storybook/addon-a11y": "^9.1.7",
+    "@storybook/addon-docs": "^9.1.7",
+    "@storybook/addon-onboarding": "^9.1.7",
+    "@storybook/addon-vitest": "^9.1.7",
+    "@storybook/nextjs-vite": "^9.1.7",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
+    "@vitest/browser": "^3.2.4",
+    "@vitest/coverage-v8": "^3.2.4",
     "autoprefixer": "10.4.21",
     "eslint": "^9.31.0",
     "eslint-config-next": "^15.3.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
+    "eslint-plugin-storybook": "^9.1.7",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "playwright": "^1.55.0",
     "prettier": "^3.6.2",
-    "typescript": "^5"
+    "storybook": "^9.1.7",
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }
