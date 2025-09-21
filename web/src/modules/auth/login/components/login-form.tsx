@@ -11,7 +11,7 @@ import { FormControl, FormError, FormField, FormItem } from '@/modules/ui/compon
 import { PasswordInput } from '@/modules/ui/components/input/password';
 import Link from 'next/dist/client/link';
 import { authService } from '../../services';
-import { useAuth } from '@/lib/store/auth.store';
+import { useAuthStore } from '@/lib/store/auth.store';
 import { AxiosError } from 'axios';
 
 const ZLoginForm = z.object({
@@ -24,7 +24,7 @@ const ZLoginForm = z.object({
 type TLoginForm = z.infer<typeof ZLoginForm>;
 
 export const LoginForm = () => {
-  const { setLoginData } = useAuth();
+  const { setLoginData } = useAuthStore();
   const searchParams = useSearchParams();
   const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);

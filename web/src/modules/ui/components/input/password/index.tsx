@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/modules/ui/lib/utils';
+import { cn } from '@/modules/ui/lib/cn';
 import { EyeIcon, EyeOff } from 'lucide-react';
 import { forwardRef, useState } from 'react';
 
