@@ -9,21 +9,21 @@ import { CheckOutService } from '../service/attendance/check-out.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiBearerAuth()
-@Controller('attendances')
+@Controller('sessions')
 @UseGuards(AuthGuard, RolesGuard)
-export class AttendanceController {
+export class WorkSessionController {
   constructor(
     private readonly checkInService: CheckInService,
     private readonly checkOutService: CheckOutService,
   ) {}
 
-  @Post('checkin')
+  @Post('start')
   @Roles('USER')
   checkIn(@CurrentUser() user: RequestUser) {
     return this.checkInService.execute(user);
   }
 
-  @Post('checkout')
+  @Post('stop')
   @Roles('USER')
   checkOut(@CurrentUser() user: RequestUser) {
     return this.checkOutService.execute(user);

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AttendanceController } from '../controller/attendance.controller';
 import { CheckInService } from '../service/attendance/check-in.service';
 import { CheckOutService } from '../service/attendance/check-out.service';
+import { WorkSessionController } from '../controller/work-session.controller';
 @Module({
-  controllers: [AttendanceController],
+  controllers: [WorkSessionController],
   providers: [CheckInService, CheckOutService],
 })
-export class AttendanceModule {}
+export class WorkSessionModule {}

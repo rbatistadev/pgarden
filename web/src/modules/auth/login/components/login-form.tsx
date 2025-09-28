@@ -11,8 +11,8 @@ import { FormControl, FormError, FormField, FormItem } from '@/modules/ui/compon
 import { PasswordInput } from '@/modules/ui/components/input/password';
 import Link from 'next/dist/client/link';
 import { authService } from '../../services';
-import { useAuthStore } from '@/lib/store/auth.store';
 import { AxiosError } from 'axios';
+import { useAuthStore } from '@/store/auth.store';
 
 const ZLoginForm = z.object({
   email: z.string().email(),

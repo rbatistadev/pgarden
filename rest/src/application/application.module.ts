@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { DomainModule } from '../domain/domain.module';
 import { AuthModule } from './modules/auth.module';
 import { UserModule } from './modules/user.module';
-import { AttendanceModule } from './modules/attendance.module';
+import { WorkSessionModule } from './modules/work-session.module';
 import { AbsenceModule } from './modules/absence.module';
 import { AgreementModule } from './modules/agreement.module';
 
@@ -11,7 +11,7 @@ import { AgreementModule } from './modules/agreement.module';
     DomainModule,
     AuthModule,
     UserModule,
-    AttendanceModule,
+    WorkSessionModule,
     AbsenceModule,
     AgreementModule,
   ],

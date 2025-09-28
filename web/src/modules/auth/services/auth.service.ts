@@ -1,5 +1,5 @@
-import { LoginRequest, LoginResponse } from '@/lib/models/auth';
-import { APIService } from '@/lib/services/api.service';
+import { APIService } from '@/services/api.service';
+import { LoginRequest, LoginResponse } from 'src/lib/models/auth';
 
 type ISignupRequest = {
   name: string;

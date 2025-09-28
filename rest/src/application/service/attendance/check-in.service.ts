@@ -1,29 +1,30 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import {
-  ATTENDANCE_REPOSITORY_INTERFACE,
-  IAttendanceRepository,
-} from 'src/domain/model/attendance/attendance.repository';
-import { Attendance } from 'src/domain/model/attendance/attendance.entity';
+  WORK_SESSION_REPOSITORY_INTERFACE,
+  IWorkSessionRepository,
+} from 'src/domain/model/work-session/work-session.repository';
+import { WorkSession } from 'src/domain/model/work-session/work-session.entity';
 import { RequestUser } from 'src/application/model/auth/auth.model';
 
 @Injectable()
 export class CheckInService {
   constructor(
-    @Inject(ATTENDANCE_REPOSITORY_INTERFACE)
-    private readonly attendanceRepository: IAttendanceRepository,
+    @Inject(WORK_SESSION_REPOSITORY_INTERFACE)
+    private readonly attendanceRepository: IWorkSessionRepository,
   ) {}
 
-  async execute(currentUser: RequestUser): Promise<Attendance> {
-    const open = await this.attendanceRepository.findOpenByUserId(
+  async execute(currentUser: RequestUser): Promise<WorkSession> {
+    const open = await this.attendanceRepository.findOpenByUser(
       currentUser.userId!,
     );
     if (open) {
       throw new ConflictException('User already checked in');
     }
-    const attendance = new Attendance(
+    const attendance = new WorkSession(
       null,
       currentUser.userId!,
       new Date(),
+      null,
       null,
     );
     return this.attendanceRepository.create(attendance);

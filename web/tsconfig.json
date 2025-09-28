@@ -21,6 +21,7 @@
     ],
     "paths": {
       "@/store/*": ["./src/lib/store/*"],
+      "@/services/*":["./src/lib/services/*"],
       "@/core/*": ["./src/core/*"],
       "@/modules/*": ["./src/modules/*"],
       "@/lib/*": ["./src/modules/ui/lib/*"],
